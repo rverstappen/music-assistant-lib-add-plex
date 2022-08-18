@@ -34,6 +34,7 @@ from music_assistant.music_providers.tunein import TuneInProvider
 from music_assistant.music_providers.url import PROVIDER_CONFIG as URL_CONFIG
 from music_assistant.music_providers.url import URLProvider
 from music_assistant.music_providers.ytmusic import YoutubeMusicProvider
+from music_assistant.music_providers.plex import PlexProvider
 
 if TYPE_CHECKING:
     from music_assistant.mass import MusicAssistant
@@ -44,6 +45,7 @@ PROV_MAP = {
     ProviderType.QOBUZ: QobuzProvider,
     ProviderType.TUNEIN: TuneInProvider,
     ProviderType.YTMUSIC: YoutubeMusicProvider,
+    ProviderType.PLEX: PlexProvider,
 }
 
 
@@ -422,7 +424,7 @@ class MusicController:
         for prov_id in removed_providers:
 
             # clean cache items from deleted provider(s)
-            self.mass.cache.clear(prov_id)
+            await self.mass.cache.clear(prov_id)
 
             # cleanup media items from db matched to deleted provider
             for ctrl in (

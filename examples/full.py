@@ -64,6 +64,16 @@ parser.add_argument(
     help="YoutubeMusic cookie",
 )
 parser.add_argument(
+    "--plex-url",
+    required=False,
+    help="Plex Server URL",
+)
+parser.add_argument(
+    "--plex-token",
+    required=False,
+    help="Plex Server Token",
+)
+parser.add_argument(
     "--debug",
     action="store_true",
     help="Enable verbose debug logging",
@@ -124,6 +134,14 @@ if args.ytmusic_username and args.ytmusic_cookie:
             ProviderType.YTMUSIC,
             username=args.ytmusic_username,
             password=args.ytmusic_cookie,
+        )
+    )
+if args.plex_url and args.plex_token:
+    mass_conf.providers.append(
+        MusicProviderConfig(
+            ProviderType.PLEX,
+            username=args.plex_url,
+            password=args.plex_token,
         )
     )
 if args.musicdir:
@@ -215,23 +233,23 @@ async def main():
         playlists = await mass.music.playlists.db_items(True)
         print(f"Got {len(playlists)} playlists in library")
         # register a player
-        test_player1 = TestPlayer("test1")
-        test_player2 = TestPlayer("test2")
-        await mass.players.register_player(test_player1)
-        await mass.players.register_player(test_player2)
-
-        # try to play some music
-        test_player1.active_queue.settings.shuffle_enabled = True
-        test_player1.active_queue.settings.repeat_mode = RepeatMode.ALL
-        test_player1.active_queue.settings.crossfade_duration = 10
-        test_player1.active_queue.settings.crossfade_mode = CrossFadeMode.SMART
-
-        # we can send a MediaItem object (such as Artist, Album, Track, Playlist)
-        # we can also send an uri, such as spotify://track/abcdfefgh
-        # or database://playlist/1
-        # or a list of items
-        if len(playlists) > 0:
-            await test_player1.active_queue.play_media(playlists[0])
+#        test_player1 = TestPlayer("test1")
+#        test_player2 = TestPlayer("test2")
+#        await mass.players.register_player(test_player1)
+#        await mass.players.register_player(test_player2)
+#
+#        # try to play some music
+#        test_player1.active_queue.settings.shuffle_enabled = True
+#        test_player1.active_queue.settings.repeat_mode = RepeatMode.ALL
+#        test_player1.active_queue.settings.crossfade_duration = 10
+#        test_player1.active_queue.settings.crossfade_mode = CrossFadeMode.SMART
+#
+#        # we can send a MediaItem object (such as Artist, Album, Track, Playlist)
+#        # we can also send an uri, such as spotify://track/abcdfefgh
+#        # or database://playlist/1
+#        # or a list of items
+#        if len(playlists) > 0:
+#            await test_player1.active_queue.play_media(playlists[0])
 
         await asyncio.sleep(3600)
 
